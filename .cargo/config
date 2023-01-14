@@ -1,0 +1,9 @@
+[build]
+target = "aarch64-unknown-none"
+
+[target.aarch64-unknown-none]
+runner = "qemu-system-aarch64 -M raspi3b -m 1024 -serial stdio -no-reboot -kernel"
+rustflags = ["-C", "link-arg=-Tpi-linker.ld"]
+
+[profile.pi4]
+rustflags = []
