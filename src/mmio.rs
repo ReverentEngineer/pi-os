@@ -1,4 +1,4 @@
-use crate::mem;
+use crate::mmu;
 
 /// Base memory-mapped IO address
 const MMIO_BASE: u32 = 0x3F000000;
@@ -6,7 +6,8 @@ const MMIO_BASE: u32 = 0x3F000000;
 /// Memory-mapped IO registers
 #[allow(non_camel_case_types)]
 #[repr(u32)]
-pub enum MMIORegister {
+#[derive(Clone, Copy)]
+pub enum Register {
     GPPUD        = 0x200094,
     GPPUDCLK0    = 0x20009C,
 
@@ -34,18 +35,19 @@ pub enum MMIORegister {
     MBOX_WRITE   = 0x00BBa0,
 }
 
-/// Write to a memory-mapped I/O register
-pub fn write(register: MMIORegister, data: u32) {
-    let address = (MMIO_BASE + register as u32) as *mut u32;
-    unsafe { mem::write(address, data) };
+impl Register {
+
+    /// Write to a memory-mapped I/O register
+    pub fn write(&self,  data: u32) {
+        let address = (MMIO_BASE + *self as u32) as *mut u32;
+        unsafe { mmu::write(address, data) };
+    }
+
+    /// Read from a memory-mapped I/O register
+    pub fn read(&self) -> u32
+    {
+        let address = (MMIO_BASE + *self as u32) as *mut u32;
+        unsafe { mmu::read(address) }
+    }
+
 }
-
-
-/// Read from a memory-mapped I/O register
-pub fn read(register: MMIORegister) -> u32
-{
-    let address = (MMIO_BASE + register as u32) as *mut u32;
-    unsafe { mem::read(address) }
-}
-
-

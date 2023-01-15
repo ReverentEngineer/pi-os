@@ -13,27 +13,28 @@ pub fn delay(count: u32) {
     }
 }
 
-
-mod mem;
+mod sync;
+mod mmu;
 mod mmio;
 mod mailbox;
+mod console;
 mod uart;
+mod log;
 mod interrupts;
 
 #[export_name = "kmain"]
 pub extern "C" fn kmain(dtb_ptr32: u64, x1: u64, x2: u64, x3: u64) {
     uart::init();
-    uart::putc('h' as u8);
-    uart::putc('e' as u8);
-    uart::putc('l' as u8);
-    uart::putc('p' as u8);
-
+    log::init();
+    mmu::init();
     loop {
-        uart::putc(uart::getc());
+        //uart::UART.write_char(uart::UART.read_char());
     }
 }
 
+use ::log::error;
 #[panic_handler]
-fn panic(_info: &PanicInfo) -> ! {
+fn panic(info: &PanicInfo) -> ! {
+    error!("{info}");
     loop {}
 }
