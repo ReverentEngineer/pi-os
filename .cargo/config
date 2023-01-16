@@ -3,7 +3,12 @@ target = "aarch64-unknown-none"
 
 [target.aarch64-unknown-none]
 runner = "qemu-system-aarch64 -M raspi3b -m 1024 -serial stdio -no-reboot -kernel"
-rustflags = ["-C", "link-arg=-Tkernel.ld"]
+rustflags = ["-C", "link-arg=-Tkernel.ld", "-C", "link-arg=-Ttext=0x80000"]
+
+[target.armv7a-none-eabi]
+runner = "qemu-system-arm -M raspi2b -m 1024 -serial stdio -no-reboot -kernel"
+rustflags = ["-C", "link-arg=-Tkernel.ld", "-C", "link-arg=-Ttext=0x8000"]
+
 
 [profile.pi4]
 rustflags = []

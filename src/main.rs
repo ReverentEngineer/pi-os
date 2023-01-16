@@ -4,8 +4,13 @@
 use core::arch::{global_asm, asm};
 use core::panic::PanicInfo;
 
+#[cfg(target_arch = "aarch64")]
 global_asm!(include_str!("asm/aarch64.s"));
 
+#[cfg(target_arch = "arm")]
+global_asm!(include_str!("asm/arm.s"));
+
+#[cfg(target_arch = "aarch64")]
 /// Delay execution 
 pub fn delay(count: u32) {
     unsafe {
@@ -13,11 +18,22 @@ pub fn delay(count: u32) {
     }
 }
 
+#[cfg(target_arch = "arm")]
+/// Delay execution 
+pub fn delay(count: u32) {
+    unsafe {
+        asm!("3:", "subs {0}, {0}, #1", "bne 3b", inout(reg) count => _, options(nomem, nostack),);
+    }
+}
+
 pub fn pi_version() -> usize {
     #[allow(unused_assignments)]
     let mut midr_el = 0;
     unsafe {
+        #[cfg(target_arch = "aarch64")]
         asm!("mrs {0:x}, midr_el1", out(reg) midr_el); 
+        #[cfg(target_arch = "arm")]
+        asm!("mrc p15, 0, {0}, c0, c0, 0", out(reg) midr_el); 
     }
     match (midr_el >> 4) & 0xFFF {
         0xB76 => 1,
