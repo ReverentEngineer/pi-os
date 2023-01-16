@@ -60,6 +60,8 @@ pub extern "C" fn kmain() {
     uart::init();
     console::set(uart::get());
     log::init();
+    ::log::info!("{} v{}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"));
+    ::log::info!("-------------------------");
     ::log::info!("Raspberry Pi {pi_version}");
     ::log::info!("UART initialized.");
     mmu::init();
