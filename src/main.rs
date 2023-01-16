@@ -23,9 +23,11 @@ mod log;
 mod interrupts;
 
 #[export_name = "kmain"]
-pub extern "C" fn kmain(dtb_ptr32: u64, x1: u64, x2: u64, x3: u64) {
+pub extern "C" fn kmain() {
     uart::init();
+    console::set(uart::get());
     log::init();
+    ::log::info!("UART initialized.");
     mmu::init();
     loop {
         //uart::UART.write_char(uart::UART.read_char());

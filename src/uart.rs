@@ -39,7 +39,11 @@ impl Uart {
         Uart { inner: Mutex::new(UartInner) }
     }
 
-    pub fn read_char(&mut self) -> char {
+}
+
+impl console::Read for Uart { 
+
+    fn read_char(&self) -> char {
         while mmio::Register::UART0_FR.read()  & (1 << 5) == (1 << 5) { }
         return unsafe { char::from_u32_unchecked(mmio::Register::UART0_DR.read()) };
     }
@@ -50,6 +54,10 @@ impl console::Write for Uart {
     fn write(&self, args: fmt::Arguments) -> fmt::Result {
         let mut guard = self.inner.lock();
         (*guard).write_fmt(args)
+    }
+
+    fn flush(&self) {
+        while mmio::Register::UART0_FR.read()  & (1 << 3) == (1 << 3) { }
     }
 }
 

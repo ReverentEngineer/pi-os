@@ -1,5 +1,5 @@
 use log::Log;
-use crate::{uart, console::Write};
+use crate::console;
 
 struct Logger;
 
@@ -13,15 +13,17 @@ impl Log for Logger {
 
     fn log(&self, record: &::log::Record) {
         if self.enabled(record.metadata()) {
-            let uart = uart::get();
-            uart.fmt(record.level()).unwrap();
-            uart.write_str(" | ").unwrap();
-            uart.fmt(record.args()).unwrap();
-            uart.write_str("\r\n").unwrap();
+            let console = console::get();
+            console.write(format_args!("{}", record.level())).unwrap();
+            console.write_str(" | ").unwrap();
+            console.write(format_args!("{}", record.args())).unwrap();
+            console.write_str("\r\n").unwrap();
         }
     }
 
     fn flush(&self) {
+        let console = console::get();
+        console.flush();
     }
 }
 
