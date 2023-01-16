@@ -1,5 +1,6 @@
 .section .text.boot
 .global _start
+.org 0x80000
 _start:
     // Park all but core "0"
     mrs	    x0, mpidr_el1
