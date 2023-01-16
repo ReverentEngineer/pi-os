@@ -1,9 +1,8 @@
 use core::arch::asm;
 use core::fmt::{self, Write};
-use core::ops::DerefMut;
 use crate::{
     mmio,
-    delay,
+    arch::delay,
     mailbox,
     sync::RawSpinlock
 };
