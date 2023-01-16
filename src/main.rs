@@ -4,7 +4,7 @@
 use core::arch::{global_asm, asm};
 use core::panic::PanicInfo;
 
-global_asm!(include_str!("asm/pi4.s"));
+global_asm!(include_str!("asm/aarch64.s"));
 
 /// Delay execution 
 pub fn delay(count: u32) {
