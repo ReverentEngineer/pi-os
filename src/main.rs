@@ -2,6 +2,7 @@
 #![no_main]
 
 use ::core::panic::PanicInfo;
+use ::log::{error, info};
 
 mod arch;
 mod drivers;
@@ -13,16 +14,14 @@ mod core;
 pub extern "C" fn kmain() {
     core::log::init();
     drivers::init();
-    ::log::info!("{} v{}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"));
-    ::log::info!("-------------------------");
-    ::log::info!("UART initialized.");
+    info!("{} v{}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"));
+    info!("-------------------------");
     mmu::init();
     loop {
         //uart::UART.write_char(uart::UART.read_char());
     }
 }
 
-use ::log::error;
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     error!("{info}");
