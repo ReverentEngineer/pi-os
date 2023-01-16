@@ -1,4 +1,4 @@
-use crate::mmio; 
+use crate::drivers::bcm2xxx::mmio; 
 
 bitflags::bitflags! {
 

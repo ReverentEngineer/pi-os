@@ -1,9 +1,8 @@
 use core::arch::asm;
 use core::fmt::{self, Write};
 use crate::{
-    mmio,
+    drivers::bcm2xxx::{mailbox, mmio},
     arch::delay,
-    mailbox,
     core::sync::RawSpinlock
 };
 use crate::core::console;
