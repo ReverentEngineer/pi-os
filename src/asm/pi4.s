@@ -8,9 +8,6 @@ _start:
     cmp     x0, x1
     b.ne    parked
 
-    ldr     x5, =_start
-    mov     sp, x5
-    
     // clear bss
     ldr     x5, =__bss_start
     ldr     w6, =__bss_size
@@ -21,6 +18,9 @@ _start:
     cbnz    w6, 1b
  
 2:
+    ldr     x5, =_start
+    mov     sp, x5
+  
     b      kmain
 
 parked:
