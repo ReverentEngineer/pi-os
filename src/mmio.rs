@@ -1,7 +1,7 @@
 use crate::mmu;
 
 /// Base memory-mapped IO address
-const MMIO_BASE: u32 = 0x3F000000;
+static mut MMIO_BASE: usize = 0x3F000000;
 
 /// Memory-mapped IO registers
 #[allow(non_camel_case_types)]
@@ -38,16 +38,30 @@ pub enum Register {
 impl Register {
 
     /// Write to a memory-mapped I/O register
-    pub fn write(&self,  data: u32) {
-        let address = (MMIO_BASE + *self as u32) as *mut u32;
+    pub fn write(self,  data: u32) {
+        let mmio_base = unsafe { MMIO_BASE };
+        let address = (mmio_base + self as usize) as *mut _;
         unsafe { mmu::write(address, data) };
     }
 
     /// Read from a memory-mapped I/O register
-    pub fn read(&self) -> u32
+    pub fn read(self) -> u32
     {
-        let address = (MMIO_BASE + *self as u32) as *mut u32;
+        let mmio_base = unsafe { MMIO_BASE };
+        let address = (mmio_base + self as usize) as *mut _;
         unsafe { mmu::read(address) }
     }
 
+}
+
+pub fn init(version: usize) {
+    let mmio_base = match version {
+        1 => 0x20000000,
+        3 | 2 => 0x3F000000,
+        4 => 0xFE000000,
+        _ => panic!("Unsupported version.")
+    };
+    unsafe {
+        MMIO_BASE = mmio_base;
+    }
 }
