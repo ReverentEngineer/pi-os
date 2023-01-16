@@ -1,5 +1,5 @@
 use log::Log;
-use crate::console;
+use crate::core::console;
 
 struct Logger;
 

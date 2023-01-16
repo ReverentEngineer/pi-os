@@ -4,9 +4,9 @@ use crate::{
     mmio,
     arch::delay,
     mailbox,
-    sync::RawSpinlock
+    core::sync::RawSpinlock
 };
-use crate::console;
+use crate::core::console;
 use lock_api::Mutex;
 
 pub static MBOX: [u32; 9] = [

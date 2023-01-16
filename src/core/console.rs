@@ -1,6 +1,6 @@
 use core::ops::Deref;
 use core::fmt;
-use crate::sync::RawSpinlock;
+use crate::core::sync::RawSpinlock;
 use lock_api::Mutex;
 
 /// Console write trait

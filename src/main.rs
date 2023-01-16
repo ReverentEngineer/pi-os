@@ -1,7 +1,7 @@
 #![no_std]
 #![no_main]
 
-use core::panic::PanicInfo;
+use ::core::panic::PanicInfo;
 
 pub fn pi_version() -> usize {
     match arch::part_num() {
@@ -14,22 +14,20 @@ pub fn pi_version() -> usize {
 }
 
 mod arch;
-mod sync;
 mod mmu;
 mod mmio;
 mod mailbox;
-mod console;
 mod uart;
-mod log;
 mod interrupts;
+mod core;
 
 #[export_name = "kmain"]
 pub extern "C" fn kmain() {
     let pi_version = pi_version();
     mmio::init(pi_version);
     uart::init();
-    console::set(uart::get());
-    log::init();
+    core::console::set(uart::get());
+    core::log::init();
     ::log::info!("{} v{}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"));
     ::log::info!("-------------------------");
     ::log::info!("Raspberry Pi {pi_version}");
