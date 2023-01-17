@@ -2,8 +2,10 @@ use core::arch::asm;
 use core::fmt::{self, Write};
 use crate::{
     drivers::bcm2xxx::{mailbox, mmio},
-    arch::delay,
-    core::sync::RawSpinlock
+    core::{
+        cpu::delay,
+        sync::RawSpinlock
+    }
 };
 use crate::core::console;
 use lock_api::Mutex;

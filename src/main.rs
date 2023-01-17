@@ -4,7 +4,6 @@
 use ::core::panic::PanicInfo;
 use ::log::{error, info};
 
-mod arch;
 mod drivers;
 mod mmu;
 mod interrupts;

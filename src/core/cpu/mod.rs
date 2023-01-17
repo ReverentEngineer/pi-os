@@ -1,10 +1,12 @@
 use core::fmt;
+mod arch;
+pub use arch::*;
 
 #[derive(Copy, Clone, Debug)]
 pub struct Info {
     arch: Arch,
     #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
-    manufacturer_id: crate::arch::arm::ManufacturerID,
+    manufacturer_id: arch::arm::ManufacturerID,
 }
 
 impl Info {
@@ -13,12 +15,17 @@ impl Info {
         Self {
             arch: Arch::get(),
             #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
-            manufacturer_id: crate::arch::midr()
+            manufacturer_id: arch::midr()
         }
     }
 
     pub fn arch(&self) -> Arch {
         self.arch
+    }
+
+    #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
+    pub fn manufacturer_id(&self) -> arch::arm::ManufacturerID {
+        self.manufacturer_id
     }
 }
 

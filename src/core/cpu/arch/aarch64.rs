@@ -1,5 +1,5 @@
 use core::arch::{global_asm, asm};
-use crate::arch::arm::ManufacturerID;
+use super::arm::ManufacturerID;
 global_asm!(include_str!("asm/aarch64.s"));
 
 pub fn midr() -> ManufacturerID {
