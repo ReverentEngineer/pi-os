@@ -3,7 +3,7 @@ mod mmio;
 mod uart;
 
 pub fn pi_version() -> usize {
-    match crate::arch::part_num() {
+    match crate::arch::midr().part_num() {
         0xB76 => 1,
         0xC07 => 2,
         0xD03 => 3,

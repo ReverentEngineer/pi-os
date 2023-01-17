@@ -1,14 +1,13 @@
 use core::arch::{global_asm, asm};
+use crate::arch::arm::ManufacturerID;
 global_asm!(include_str!("asm/aarch64.s"));
 
-/// Get ARM part num
-pub fn part_num() -> u16 {
-    #[allow(unused_assignments)]
+pub fn midr() -> ManufacturerID {
     let mut midr = 0;
     unsafe {    
-        asm!("mrs {0:x}, midr_el1", out(reg) midr); 
+        asm!("mrs {0:x}, midr_el1", out(reg) midr);
     }
-    (midr >> 4) & 0xFFF 
+    ManufacturerID::from_midr(midr as u32)
 }
 
 /// Delay execution 
